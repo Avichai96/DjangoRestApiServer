@@ -7,7 +7,7 @@ import { getAllContacts } from "../services/request/contacts";
 
 function UserAndContacts(props) {
   const [userList, setUserList] = useState([]); //users
-  const [contactSelectedById, setContactSelectedById] = useState([]); //User which onclick event
+  const [selectedUser,setSelectedUser] =useState(null)
   const [contactList, setContactList] = useState([]);
   const [showContact, setShowContact] = useState(false);
 
@@ -20,28 +20,34 @@ function UserAndContacts(props) {
   const fetchUsers = async () => {
     const users = await getAllUsers();
     setUserList(users.data);
-    console.log("user" + users.data);
   };
+
+  // const updateUserList = async (user) => {
+  //   let users = [...userList]
+  //   users.push(user)
+  //   setUserList(users)
+  // }
 
   const fetchContacts = async () => {
     const contacts = await getAllContacts();
     setContactList(contacts.data);
-    console.log("contact" + contacts.data);
   };
 
+
   const onSelectUser = (id) => {
-    const contactsById = contactList.filter((contact) => {
-      return contact.user === id;
-    });
-    setContactSelectedById(contactsById);
+    setSelectedUser(id)
     setShowContact(true);
   };
 
   return (
     <div hidden={!props.show}>
       <div className={classes.contactsWrapper}>
-        <Users userList={userList} onSelectUser={onSelectUser} />
-        {showContact && <ContactsList contactList={contactSelectedById} />}
+        <Users userList={userList} onSelectUser={onSelectUser} fetchUsers={fetchUsers} updateUserList={fetchUsers}/>
+        {showContact && <ContactsList selectedUser={selectedUser} contactList={
+          contactList.filter((contact) => {
+            return contact.user === selectedUser;
+          })}
+     updateContactList={fetchContacts}/>}
       </div>
     </div>
   );

@@ -1,7 +1,11 @@
 .root
 {
     width: 100%;
-    max-width: 30vw;
+    max-width: 50vw;
     background-color: #ebebeb;
     display: inline-block;
+}
+.addbut
+{
+    margin-right: 1000px;
 }
